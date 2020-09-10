@@ -3,25 +3,26 @@ const router = express.Router();
 const Picture = require("../models/Picture");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const auth = require("../middleware/auth");
 
-// get all pictures
-router.get("/", async (req, res) => {
+// GET
+//get all pictures
+router.get("/", auth, async (req, res) => {
 	try {
 		const pictures = await Picture.find().sort({ date: -1 });
 		res.json(pictures);
 	} catch (err) {
+		console.error(err.message);
 		res.status(500).send("Server error");
 	}
 });
 
 // POST
 // add a new picture
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
 	try {
-		const { token } = req.body;
-		const decodedToken = jwt.verify(token, process.env.JWTSECRET);
 		const newPicture = new Picture({
-			user: decodedToken.id,
+			user: req.user,
 			label: req.body.label,
 			imageURL: req.body.url,
 		});
@@ -32,19 +33,21 @@ router.post("/", async (req, res) => {
 	}
 });
 
+// DELETE
 // delete a picture
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
 	try {
-		const picture = await Pictures.findById(req.params.id);
+		const picture = await Picture.findById(req.params.id);
 		if (!picture) {
 			return res.status(404).json("Picture not found");
 		}
-		if (picture.user.toString() !== req.user.id) {
-			return res.status(401).json("User not authorized");
+		if (picture.user.toString() !== req.user) {
+			return res.status(401).json("Not authorized");
 		}
-		await pictures.remove();
+		await picture.remove();
 		return res.status(200).json("Picture deleted");
 	} catch (err) {
+		console.error(err.message);
 		res.status(500).send("Server error");
 	}
 });

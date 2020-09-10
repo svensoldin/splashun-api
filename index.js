@@ -18,7 +18,6 @@ app.use(express.json());
 app.use("/pictures", require("./api/routes/pictures"));
 app.use("/users", require("./api/routes/users"));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT);
+app.listen(process.env.PORT || 3000);
 
-console.log("and baaack to you Johnny");
+console.log("aaaaand back to you Alex");

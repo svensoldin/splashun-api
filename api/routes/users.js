@@ -29,7 +29,6 @@ router.post("/register", async (req, res) => {
 		const token = jwt.sign(user.id, process.env.JWTSECRET, {
 			expiresIn: 600,
 		});
-		//Send back the token as a cookie, which will be included in every request therafter
 		res.status(200).json(token);
 	} catch (err) {
 		res.status(500).json(err.message);
@@ -54,9 +53,8 @@ router.get("/signin", async (req, res) => {
 			id: user.id,
 		};
 		const token = jwt.sign(payload, process.env.JWTSECRET, {
-			expiresIn: 600,
+			expiresIn: 1000 * 60 * 10,
 		});
-		//Send back the token as a cookie, which will be included in every request therafter
 		res.status(200).json(token);
 	} catch (err) {
 		res.status(500).send("Server error");
