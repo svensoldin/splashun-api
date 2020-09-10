@@ -1,12 +1,24 @@
 const express = require("express");
-const bodyParser = require("body-parser");
-const router = require("./api/routes/pictureRoutes");
+require("dotenv").config();
+const mongoose = require("mongoose");
+
 const app = express();
-const port = process.env.PORT || 3000;
 
-app.use(bodyParser.json());
-app.use(router);
+// connect DB
+mongoose.set("useUnifiedTopology", true);
+mongoose.connect(
+	`mongodb+srv://kikoplou:${process.env.PASSWORD}@mern.yy0tj.mongodb.net/splashunDB?retryWrites=true&w=majority`,
+	{ useNewUrlParser: true }
+);
+mongoose.Promise = global.Promise;
 
-app.listen(port);
+app.use(express.json());
+
+//Define routes
+app.use("/pictures", require("./api/routes/pictures"));
+app.use("/users", require("./api/routes/users"));
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT);
 
 console.log("and baaack to you Johnny");

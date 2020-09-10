@@ -1,0 +1,66 @@
+const express = require("express");
+const router = express.Router();
+const Picture = require("../models/Picture");
+const User = require("../models/User");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+// POST
+// register a new user
+
+router.post("/register", async (req, res) => {
+	try {
+		const { name, email, password } = req.body;
+
+		//Check if user already exists
+		let user = await User.findOne({ email });
+		if (user) {
+			return res.status(400).json("User already exists");
+		}
+
+		user = new User({
+			name,
+			email,
+			password,
+		});
+		//Encrypt password
+		user.password = await bcrypt.hash(password, 10);
+		await user.save();
+		const token = jwt.sign(user.id, process.env.JWTSECRET, {
+			expiresIn: 600,
+		});
+		//Send back the token as a cookie, which will be included in every request therafter
+		res.status(200).json(token);
+	} catch (err) {
+		res.status(500).json(err.message);
+	}
+});
+
+// GET
+// Sign in
+
+router.get("/signin", async (req, res) => {
+	try {
+		const { email, password } = req.body;
+		const user = await User.findOne({ email });
+		if (!user) {
+			return res.json("Wrong credentials");
+		}
+		const isMatch = await bcrypt.compare(password, user.password);
+		if (!isMatch) {
+			return res.json("Wrong credentials");
+		}
+		const payload = {
+			id: user.id,
+		};
+		const token = jwt.sign(payload, process.env.JWTSECRET, {
+			expiresIn: 600,
+		});
+		//Send back the token as a cookie, which will be included in every request therafter
+		res.status(200).json(token);
+	} catch (err) {
+		res.status(500).send("Server error");
+	}
+});
+
+module.exports = router;
