@@ -1,8 +1,10 @@
 const express = require("express");
 require("dotenv").config();
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const app = express();
+app.use(cors());
 
 // connect DB
 mongoose.set("useUnifiedTopology", true);
@@ -18,6 +20,7 @@ app.use(express.json());
 app.use("/pictures", require("./api/routes/pictures"));
 app.use("/users", require("./api/routes/users"));
 
-app.listen(process.env.PORT || 3000);
+const port = process.env.PORT || 5000;
+app.listen(port);
 
-console.log("aaaaand back to you Alex");
+console.log("server is running on" + port);

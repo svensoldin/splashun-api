@@ -26,8 +26,11 @@ router.post("/register", async (req, res) => {
 		//Encrypt password
 		user.password = await bcrypt.hash(password, 10);
 		await user.save();
-		const token = jwt.sign(user.id, process.env.JWTSECRET, {
-			expiresIn: 600,
+		const payload = {
+			id: user.id,
+		};
+		const token = jwt.sign(payload, process.env.JWTSECRET, {
+			expiresIn: 60 * 1000 * 10,
 		});
 		res.status(200).json(token);
 	} catch (err) {
@@ -35,10 +38,10 @@ router.post("/register", async (req, res) => {
 	}
 });
 
-// GET
+// POST
 // Sign in
 
-router.get("/signin", async (req, res) => {
+router.post("/signin", async (req, res) => {
 	try {
 		const { email, password } = req.body;
 		const user = await User.findOne({ email });
@@ -57,7 +60,7 @@ router.get("/signin", async (req, res) => {
 		});
 		res.status(200).json(token);
 	} catch (err) {
-		res.status(500).send("Server error");
+		res.status(500).json("Server error");
 	}
 });
 
