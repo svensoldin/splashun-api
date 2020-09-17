@@ -24,11 +24,12 @@ router.post("/", auth, async (req, res) => {
 		const newPicture = new Picture({
 			user: req.user,
 			label: req.body.label,
-			imageURL: req.body.url,
+			imageURL: req.body.imageURL,
 		});
 		const picture = await newPicture.save();
-		res.status(200).json(picture);
+		res.status(200).redirect("/pictures");
 	} catch (err) {
+		console.error(err);
 		res.status(500).send("Server error");
 	}
 });

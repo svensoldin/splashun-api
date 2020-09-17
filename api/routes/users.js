@@ -34,6 +34,7 @@ router.post("/register", async (req, res) => {
 		});
 		res.status(200).json(token);
 	} catch (err) {
+		console.error(err);
 		res.status(500).json(err.message);
 	}
 });
