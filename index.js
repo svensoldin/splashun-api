@@ -3,13 +3,10 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 const app = express();
 
-const corsOptions = {
-	origin: ["https://splashun.netlify.app"],
-	credentials: true,
-};
-app.use(cors(corsOptions));
+app.use(cors());
 
 // connect DB
 mongoose.set("useUnifiedTopology", true);
