@@ -4,10 +4,11 @@ const Picture = require("../models/Picture");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
+const cors = require("cors");
 
 // GET
 //get all pictures
-router.get("/", auth, async (req, res) => {
+router.get("/", [cors(), auth], async (req, res) => {
 	try {
 		const pictures = await Picture.find().sort({ date: -1 });
 		res.json(pictures);
@@ -19,7 +20,7 @@ router.get("/", auth, async (req, res) => {
 
 // POST
 // add a new picture
-router.post("/", auth, async (req, res) => {
+router.post("/", [cors(), auth], async (req, res) => {
 	try {
 		const newPicture = new Picture({
 			user: req.user,
@@ -36,7 +37,7 @@ router.post("/", auth, async (req, res) => {
 
 // DELETE
 // delete a picture
-router.delete("/:id", auth, async (req, res) => {
+router.delete("/:id", [cors(), auth], async (req, res) => {
 	try {
 		const picture = await Picture.findById(req.params.id);
 		if (!picture) {
