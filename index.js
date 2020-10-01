@@ -5,7 +5,11 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(cors({ origin: true }));
+const corsOptions = {
+	origin: ["https://splashun.netlify.app"],
+	credentials: true,
+};
+app.use(cors(corsOptions));
 
 // connect DB
 mongoose.set("useUnifiedTopology", true);
