@@ -4,11 +4,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
-const corsOptions = {
-	origin: "*",
-	optionsSuccessStatus: 200,
-};
-app.use(cors(corsOptions));
+
+app.use(cors({ origin: true }));
 
 // connect DB
 mongoose.set("useUnifiedTopology", true);

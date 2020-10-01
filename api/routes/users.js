@@ -4,12 +4,11 @@ const Picture = require("../models/Picture");
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const cors = require("cors");
 
 // POST
 // register a new user
 
-router.post("/register", cors(), async (req, res) => {
+router.post("/register", async (req, res) => {
 	try {
 		const { name, email, password } = req.body;
 
@@ -43,7 +42,7 @@ router.post("/register", cors(), async (req, res) => {
 // POST
 // Sign in
 
-router.post("/signin", cors(), async (req, res) => {
+router.post("/signin", async (req, res) => {
 	try {
 		const { email, password } = req.body;
 		const user = await User.findOne({ email });
