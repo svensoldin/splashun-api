@@ -4,15 +4,10 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
-app.use((req, res, next) => {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header(
-		"Access-Control-Allow-Origin",
-		"Origin, X-Requested-With, Content-Type, Accept"
-	);
-	next();
-});
+const corsOptions = {
+	origin: "https://splashun.netlify.app",
+};
+app.use(cors(corsOptions));
 
 // connect DB
 mongoose.set("useUnifiedTopology", true);
