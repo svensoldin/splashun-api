@@ -3,6 +3,11 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 
 const app = express();
+const corsOptions = {
+	origin: "*",
+	optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 // connect DB
 mongoose.set("useUnifiedTopology", true);
