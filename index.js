@@ -10,11 +10,14 @@ app.use(express.json());
 
 // connect DB
 mongoose.set("useUnifiedTopology", true);
-try {
-	await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
-} catch (err) {
-	console.error(err);
-}
+const mongooseConnect = async () => {
+	try {
+		await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
+	} catch (err) {
+		console.error(err);
+	}
+};
+mongooseConnect();
 mongoose.Promise = global.Promise;
 
 //Define routes
