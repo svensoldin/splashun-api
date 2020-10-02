@@ -10,7 +10,9 @@ app.use(express.json());
 
 // connect DB
 mongoose.set("useUnifiedTopology", true);
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true });
+mongoose
+	.connect(process.env.MONGO_URI, { useNewUrlParser: true })
+	.catch((err) => console.log(err));
 mongoose.Promise = global.Promise;
 
 //Define routes
